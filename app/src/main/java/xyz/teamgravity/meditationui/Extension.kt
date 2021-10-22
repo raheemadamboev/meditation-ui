@@ -44,3 +44,11 @@ fun buildFeatures() = listOf(
         Beige3
     )
 )
+
+fun buildMenu() = listOf(
+    MenuModel("Home", R.drawable.ic_home),
+    MenuModel("Meditate", R.drawable.ic_buble),
+    MenuModel("Sleep", R.drawable.ic_moon),
+    MenuModel("Music", R.drawable.ic_music),
+    MenuModel("Profile", R.drawable.ic_profile),
+)

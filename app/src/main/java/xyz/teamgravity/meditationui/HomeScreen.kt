@@ -40,6 +40,11 @@ fun HomeScreen() {
             CurrentMeditation(color = LightRed)
             FeatureSection(features = buildFeatures())
         }
+
+        BottomMenu(
+            menus = buildMenu(),
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -134,7 +139,7 @@ fun CurrentMeditation(
                 .size(40.dp)
                 .clip(CircleShape)
                 .clickable {
-                    
+
                 }
                 .background(ButtonBlue)
                 .padding(10.dp)
@@ -268,5 +273,73 @@ fun Feature(
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )
         }
+    }
+}
+
+@Composable
+fun BottomMenu(
+    menus: List<MenuModel>,
+    modifier: Modifier = Modifier,
+    activeHighlightColor: Color = ButtonBlue,
+    activeTextColor: Color = Color.White,
+    inactiveTextColor: Color = AquaBlue,
+    initialSelectedItemIndex: Int = 0
+) {
+    var selectedItemIndex by remember { mutableStateOf(initialSelectedItemIndex) }
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(DeepBlue)
+            .padding(15.dp)
+    ) {
+        menus.forEachIndexed { index, menu ->
+            BottomMenuItem(
+                menu = menu,
+                selected = index == selectedItemIndex,
+                activeHighlightColor = activeHighlightColor,
+                activeTextColor = activeTextColor,
+                inactiveTextColor = inactiveTextColor
+            ) {
+                selectedItemIndex = index
+            }
+        }
+    }
+}
+
+@Composable
+fun BottomMenuItem(
+    menu: MenuModel,
+    selected: Boolean = false,
+    activeHighlightColor: Color = ButtonBlue,
+    activeTextColor: Color = Color.White,
+    inactiveTextColor: Color = AquaBlue,
+    onItemClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.clickable { onItemClick() }
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(if (selected) activeHighlightColor else Color.Transparent)
+                .padding(10.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = menu.iconId),
+                contentDescription = menu.title,
+                tint = if (selected) activeTextColor else inactiveTextColor,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+
+        Text(
+            text = menu.title,
+            color = if (selected) activeHighlightColor else inactiveTextColor
+        )
     }
 }

@@ -32,11 +32,26 @@ fun HomeScreen() {
             .background(DeepBlue)
             .fillMaxSize()
     ) {
+
+        var currentName by remember { mutableStateOf("Daily Thought") }
+        var playing by remember { mutableStateOf(false) }
+
         Column {
             GreetingSection(name = "Raheem")
             ChipSection(chips = listOf("Sweet sleep", "Insomnia", "Depression"))
-            CurrentMeditation(color = LightRed)
-            FeatureSection(features = buildFeatures())
+
+            CurrentMeditation(
+                color = LightRed,
+                name = currentName,
+                playing = playing,
+            ) {
+                playing = !playing
+            }
+
+            FeatureSection(features = buildFeatures()) { name ->
+                currentName = name
+                playing = true
+            }
         }
 
         BottomMenu(
@@ -107,9 +122,11 @@ fun ChipSection(
 
 @Composable
 fun CurrentMeditation(
-    color: Color
+    color: Color,
+    name: String,
+    playing: Boolean,
+    onClick: () -> Unit
 ) {
-    var playing by remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -123,7 +140,7 @@ fun CurrentMeditation(
     ) {
         Column(verticalArrangement = Arrangement.Center) {
             Text(
-                text = "Daily Thought",
+                text = name,
                 style = MaterialTheme.typography.h2
             )
             Text(
@@ -138,9 +155,7 @@ fun CurrentMeditation(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .clickable {
-                    playing = !playing
-                }
+                .clickable { onClick() }
                 .background(ButtonBlue)
                 .padding(10.dp)
         ) {
@@ -157,7 +172,8 @@ fun CurrentMeditation(
 @ExperimentalFoundationApi
 @Composable
 fun FeatureSection(
-    features: List<FeatureModel>
+    features: List<FeatureModel>,
+    onNameChange: (name: String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -172,7 +188,9 @@ fun FeatureSection(
             modifier = Modifier.fillMaxHeight()
         ) {
             items(features.size) {
-                Feature(feature = features[it])
+                Feature(feature = features[it]) {
+                    onNameChange(features[it].title)
+                }
             }
         }
     }
@@ -180,7 +198,8 @@ fun FeatureSection(
 
 @Composable
 fun Feature(
-    feature: FeatureModel
+    feature: FeatureModel,
+    onClick: () -> Unit
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -266,9 +285,7 @@ fun Feature(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable {
-
-                    }
+                    .clickable { onClick() }
                     .background(ButtonBlue)
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )

@@ -1,9 +1,6 @@
 package xyz.teamgravity.meditationui
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -111,6 +109,8 @@ fun ChipSection(
 fun CurrentMeditation(
     color: Color
 ) {
+    var playing by remember { mutableStateOf(false) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -139,16 +139,16 @@ fun CurrentMeditation(
                 .size(40.dp)
                 .clip(CircleShape)
                 .clickable {
-
+                    playing = !playing
                 }
                 .background(ButtonBlue)
                 .padding(10.dp)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
+            Image(
+                painter = painterResource(id = if (playing) R.drawable.ic_pause else R.drawable.ic_play),
                 contentDescription = "play",
-                tint = Color.White,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(24.dp),
+                colorFilter = ColorFilter.tint(Color.White)
             )
         }
     }

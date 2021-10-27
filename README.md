@@ -1,5 +1,5 @@
 # meditation-ui
-Beautiful meditation application UI built by Jetpack Compose.
+Beautiful meditation application UI built by Jetpack Compose. 
 
 **Meditation UI**
 
